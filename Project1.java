@@ -5,6 +5,8 @@ public class Project1 {
 	{
 		// Instantiate Primes Class
 		Primes p = new Primes();
+		
+		
 		MainWindow mw = new MainWindow(Config.APPLICATIONNAME, p);
 		mw.popupMain();
 		

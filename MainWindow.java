@@ -148,12 +148,16 @@ public class MainWindow extends JFrame
 	{
 		lblPrimeCount.setText(String.valueOf(m_Primes.primeCount()));
 		lblCrossCount.setText(String.valueOf(m_Primes.crossesCount()));
-		//lblLargestPrime.setText("The largest prime has " + String.valueOf(m_Primes.sizeofLastPrime()) + " digits.");
-		//lblLargestPrime.setText("The largest cross has " + String.valueOf(m_Primes.sizeofLastCross().left()) + " and " + String.valueOf(m_Primes.sizeofLastCross().right()) + " digits.");
+		if (m_Primes.primeCount() != 0) {
+		lblLargestPrime.setText("The largest prime has " + String.valueOf(m_Primes.sizeofLastPrime()) + " digits.");
+		}
+		if (m_Primes.crossesCount() != 0) {
+			lblLargestCross.setText("The largest cross has " + String.valueOf(m_Primes.sizeofLastCross().left()) + " and " + String.valueOf(m_Primes.sizeofLastCross().right()) + " digits.");
+		}
  	}
 	public void popupMain() {
 		// Header
-		JDialog dPrimes = new JDialog(this, "Hexagon Cross for Less");
+		JDialog dPrimes = new JDialog(this, Config.APPLICATIONNAME);
 		GridBagLayout gridLayout = new GridBagLayout();
 		dPrimes.getContentPane().setBackground(new Color(52, 0, 0));
 		dPrimes.getContentPane().setLayout(gridLayout);
@@ -181,13 +185,8 @@ public class MainWindow extends JFrame
 		
 		// Text field
 		tfPrimeFileName = new JTextField(Config.PRIMEFILENAME);
-		tfPrimeFileName.setColumns(45);
-		/*
-		tfPrimeFileName.addActionListener(new ActionListener() {
-			public void actionPerformed (ActionEvent e) {
-				Config.PRIMEFILENAME = tfPrimeFileName.getText();
-			}
-	});*/
+		tfPrimeFileName.setColumns(50);
+		
 		pnlPrimes.add(tfPrimeFileName, gbcPanel);
 
 		
@@ -213,7 +212,14 @@ public class MainWindow extends JFrame
 		JButton loadPrimes = new JButton("Load");
 		loadPrimes.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				FileAccess.loadPrimes(m_Primes, tfPrimeFileName.getText());
+				boolean what = FileAccess.loadPrimes(m_Primes, tfPrimeFileName.getText());
+				if (what == true) {
+					lblStatus.setText("Status: Primes list loaded successfully");
+					updateStats();
+				}
+				else {
+					lblStatus.setText("Status: Primes list load unsuccessful");
+				}
 		      }
 		});
 		pnlPrimes.add(loadPrimes, gbcPanel);
@@ -236,7 +242,7 @@ public class MainWindow extends JFrame
 		
 		// Text field
 		tfCrossFileName = new JTextField(Config.CROSSFILENAME);
-		tfCrossFileName.setColumns(45);
+		tfCrossFileName.setColumns(50);
 		gbcPanel.gridx = 0;
 		gbcPanel.gridy = 0;
 		pnlCrosses.add(tfCrossFileName, gbcPanel);
@@ -264,8 +270,15 @@ public class MainWindow extends JFrame
 		JButton loadCrosses = new JButton("Load");
 		loadCrosses.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				FileAccess.loadCrosses(m_Primes, tfCrossFileName.getText());
+				boolean what = FileAccess.loadCrosses(m_Primes, tfCrossFileName.getText());
+				if (what == true) {
+					lblStatus.setText("Status: Cross list loaded successfully");
+					updateStats();
 				}
+				else {
+					lblStatus.setText("Status: Cross list load unsuccessful");
+				}
+			}
 		});
 		pnlCrosses.add(loadCrosses, gbcPanel);
 				
@@ -294,7 +307,6 @@ public class MainWindow extends JFrame
 		generatePrimes.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				popupGeneratePrimes();
-				updateStats();
 				}
 		});
 		pnlPriCro.add(generatePrimes, gbcPanel);
@@ -306,16 +318,24 @@ public class MainWindow extends JFrame
 		JButton generateCrosses = new JButton("Generate Crosses");
 		generateCrosses.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				popupGeneratePrimes();
+				m_Primes.generateTwinPrimes();
+				m_Primes.generateHexPrimes();
+				lblStatus.setText("Status: Ecstatic. Crosses have been generated.");
 				updateStats();
 				}
 		});
 		pnlPriCro.add(generateCrosses, gbcPanel);
-		dPrimes.add(pnlPriCro, gbcDialog);
 		
-		// label for digits of largest prime
+		// label for digits of largest prime and largest cross
+		gbcPanel.gridx = 1;
+		gbcPanel.anchor = GridBagConstraints.NORTH;
 		lblLargestPrime = new JLabel("The largest prime has 0 digits");
 		lblLargestCross = new JLabel("The largest cross has 0 and 0 digits");
+		
+		pnlPriCro.add(lblLargestPrime, gbcPanel);
+		gbcPanel.anchor = GridBagConstraints.SOUTH;
+		pnlPriCro.add(lblLargestCross, gbcPanel);
+		dPrimes.add(pnlPriCro, gbcDialog);
 		
 		
 		// Fourth panel - Status bar
@@ -337,5 +357,7 @@ public class MainWindow extends JFrame
 		
 		
 	}
+
+
 
 }

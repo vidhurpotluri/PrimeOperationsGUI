@@ -174,19 +174,26 @@ public class Primes {
 	{
 		return crossList.size();
 	}
-	/*
+	
 	public class IterablePrimes implements Iterable<BigInteger>
 	{		
-		Iterator<>
+		public Iterator<BigInteger> iterator() {
+			return primeList.iterator();
+		}
 	}
 	
 	public IterablePrimes iteratePrimes() { return new IterablePrimes();}
 
-	public class IterableCrosses implements Iterable<BigInteger>
-	{		
+	public class IterableCrosses implements Iterable<Pair<BigInteger>>
+	{	
+		public Iterator<Pair<BigInteger>> iterator() {
+			return crossList.iterator();
+		}
+		
+	
 	}
 	
-	public IterableCrosses iterateCrosses() { return new IterablePrimes();}
+	public IterableCrosses iterateCrosses() { return new IterableCrosses();}
 
-*/
+
 }
