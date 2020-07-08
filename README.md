@@ -1,2 +1,2 @@
-# CSCE-314-Phase2
-CSCE 314 Project phase 2
+# Prime Operations GUI
+CSCE 314 Project 2
